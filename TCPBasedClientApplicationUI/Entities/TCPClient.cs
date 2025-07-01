@@ -11,6 +11,7 @@ namespace TCPBasedClientApplicationUI.Entities
     public class TCPClient
     {
         private TcpClient Client;
+        private Socket Socket;
         //public byte StartByte;
         //public bool IsConnectedToServer = false;
         private string IP;
@@ -22,12 +23,20 @@ namespace TCPBasedClientApplicationUI.Entities
             Port = port;
             IP = ip;
             //StartByte = startByte;
+            
+
         }
 
         private void ConnectToServer()
         {
             Client = new TcpClient();
             Client.Connect(IP, Port);
+
+            //Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            //Socket.Connect("127.0.0.1", 80);
+            //Socket.Send(Encoding.UTF8.GetBytes("Merhaba"));
+            
+
             //Client.SendBufferSize = BufferSize;
             //Client.ReceiveBufferSize = BufferSize;
         }
@@ -53,7 +62,6 @@ namespace TCPBasedClientApplicationUI.Entities
 
                 byte[] data = Encoding.GetEncoding("ISO-8859-9").GetBytes(message);
                 Stream.Write(data, 0, data.Length);
-
             }
             catch (Exception ex)
             {
@@ -66,13 +74,13 @@ namespace TCPBasedClientApplicationUI.Entities
             }
         }
 
-        public string? GetDataFromServer()
+        public async Task<string?> GetDataFromServer()
         {
             ConnectToServer();
             Stream = Client.GetStream();
 
             byte[] buffer = new byte[1024];
-            int bytesRead = Stream.Read(buffer, 0, buffer.Length);
+            int bytesRead = await Stream.ReadAsync(buffer, 0, buffer.Length);
             if (bytesRead > 0)
             {
                 string mesaj = Encoding.GetEncoding("ISO-8859-9").GetString(buffer, 0, bytesRead);
