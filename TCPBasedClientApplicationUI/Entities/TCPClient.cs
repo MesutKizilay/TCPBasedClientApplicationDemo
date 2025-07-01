@@ -1,0 +1,89 @@
+﻿using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Sockets;
+using System.Text;
+using System.Xml.Linq;
+
+namespace TCPBasedClientApplicationUI.Entities
+{
+    public class TCPClient
+    {
+        private TcpClient Client;
+        //public byte StartByte;
+        //public bool IsConnectedToServer = false;
+        private string IP;
+        private int Port;
+        private NetworkStream Stream;
+
+        public TCPClient(int port = 80, string ip = "127.0.0.1")
+        {
+            Port = port;
+            IP = ip;
+            //StartByte = startByte;
+        }
+
+        private void ConnectToServer()
+        {
+            Client = new TcpClient();
+            Client.Connect(IP, Port);
+            //Client.SendBufferSize = BufferSize;
+            //Client.ReceiveBufferSize = BufferSize;
+        }
+
+        private void DisconnectFromServer()
+        {
+            if (Client != null)
+            {
+                Client?.Close();
+                Client?.Dispose();
+                Stream?.Dispose();
+                Stream?.Close();
+                Client = null;
+            }
+        }
+
+        public void SendDataToServer(string message)
+        {
+            try
+            {
+                ConnectToServer();
+                Stream = Client.GetStream();
+
+                byte[] data = Encoding.GetEncoding("ISO-8859-9").GetBytes(message);
+                Stream.Write(data, 0, data.Length);
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                //Stream.Dispose();
+                DisconnectFromServer();
+            }
+        }
+
+        public string? GetDataFromServer()
+        {
+            ConnectToServer();
+            Stream = Client.GetStream();
+
+            byte[] buffer = new byte[1024];
+            int bytesRead = Stream.Read(buffer, 0, buffer.Length);
+            if (bytesRead > 0)
+            {
+                string mesaj = Encoding.GetEncoding("ISO-8859-9").GetString(buffer, 0, bytesRead);
+
+                // UI Thread'de TextBox'a yaz
+                //Invoke(new Action(() =>
+                //{
+                return mesaj;
+                //}));
+            }
+            return null;
+        }
+    }
+}
