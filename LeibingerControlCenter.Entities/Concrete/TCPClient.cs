@@ -1,12 +1,7 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Text;
-using System.Xml.Linq;
 
-namespace TCPBasedClientApplicationUI.Entities
+namespace LeibingerControlCenterUI.Entities
 {
     public class TCPClient
     {
@@ -18,24 +13,22 @@ namespace TCPBasedClientApplicationUI.Entities
         private int Port;
         private NetworkStream Stream;
 
+        //public TCPClient(int port = 3000, string ip = "192.168.111.50")
         public TCPClient(int port = 80, string ip = "127.0.0.1")
         {
             Port = port;
             IP = ip;
-            //StartByte = startByte;
-            
-
         }
 
-        private void ConnectToServer()
+        private async Task ConnectToServer()
         {
             Client = new TcpClient();
-            Client.Connect(IP, Port);
+            await Client.ConnectAsync(IP, Port);
 
             //Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             //Socket.Connect("127.0.0.1", 80);
             //Socket.Send(Encoding.UTF8.GetBytes("Merhaba"));
-            
+
 
             //Client.SendBufferSize = BufferSize;
             //Client.ReceiveBufferSize = BufferSize;
@@ -53,45 +46,57 @@ namespace TCPBasedClientApplicationUI.Entities
             }
         }
 
-        public void SendDataToServer(string message)
+        public async Task SendDataToServer(string message)
         {
             try
             {
-                ConnectToServer();
+                await ConnectToServer();
                 Stream = Client.GetStream();
 
                 byte[] data = Encoding.GetEncoding("ISO-8859-9").GetBytes(message);
-                Stream.Write(data, 0, data.Length);
+                await Stream.WriteAsync(data, 0, data.Length);
             }
             catch (Exception ex)
             {
                 throw;
             }
-            finally
-            {
-                //Stream.Dispose();
-                DisconnectFromServer();
-            }
+            //finally
+            //{
+            //    //Stream.Dispose();
+            //    /*DisconnectFromServer();*/
+            //}
         }
 
         public async Task<string?> GetDataFromServer()
         {
-            ConnectToServer();
-            Stream = Client.GetStream();
+            //ConnectToServer();
+            //Stream = Client.GetStream();
 
-            byte[] buffer = new byte[1024];
-            int bytesRead = await Stream.ReadAsync(buffer, 0, buffer.Length);
-            if (bytesRead > 0)
+            try
             {
-                string mesaj = Encoding.GetEncoding("ISO-8859-9").GetString(buffer, 0, bytesRead);
+                byte[] buffer = new byte[1024];
+                int bytesRead = await Stream.ReadAsync(buffer, 0, buffer.Length);
+                if (bytesRead > 0)
+                {
+                    string mesaj = Encoding.GetEncoding("ISO-8859-9").GetString(buffer, 0, bytesRead);
 
-                // UI Thread'de TextBox'a yaz
-                //Invoke(new Action(() =>
-                //{
-                return mesaj;
-                //}));
+                    // UI Thread'de TextBox'a yaz
+                    //Invoke(new Action(() =>
+                    //{
+                    return mesaj;
+                    //}));
+                }
+                return null;
             }
-            return null;
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                Stream.Dispose();
+                DisconnectFromServer();
+            }
         }
     }
 }
