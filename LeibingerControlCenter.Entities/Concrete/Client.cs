@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeibingerControlCenter.Entites.Concrete
+namespace LeibingerControlCenter.Entities.Concrete
 {
-    internal class Client
+    public class Client
     {
+        public int Id { get; set; }
         public string Ip { get; set; }
         public int Port { get; set; }
 

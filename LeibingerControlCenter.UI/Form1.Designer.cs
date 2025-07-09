@@ -30,7 +30,6 @@
         {
             txtData = new TextBox();
             btnSendData = new Button();
-            btnConnect = new Button();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -55,13 +54,37 @@
             label10 = new Label();
             label11 = new Label();
             panel2 = new Panel();
+            tabControl1 = new TabControl();
+            tabPage3 = new TabPage();
+            lvJobs = new ListView();
+            columnHeader1 = new ColumnHeader();
+            panel3 = new Panel();
+            btnLoadFile = new Button();
+            btnDownloadFile = new Button();
+            btnJobLoad = new Button();
+            btnDirectoryInfo = new Button();
+            tabPage1 = new TabPage();
+            tabPage2 = new TabPage();
+            btnDisconnect = new Button();
+            label12 = new Label();
+            lblConnectionMessage = new Label();
+            cmbIpAddress = new ComboBox();
+            btnConnect = new Button();
+            label13 = new Label();
+            txtPort = new TextBox();
+            openFileDialog1 = new OpenFileDialog();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
+            tabControl1.SuspendLayout();
+            tabPage3.SuspendLayout();
+            panel3.SuspendLayout();
+            tabPage1.SuspendLayout();
+            tabPage2.SuspendLayout();
             SuspendLayout();
             // 
             // txtData
             // 
-            txtData.Location = new Point(520, 340);
+            txtData.Location = new Point(161, 293);
             txtData.Name = "txtData";
             txtData.Size = new Size(257, 27);
             txtData.TabIndex = 0;
@@ -69,7 +92,7 @@
             // 
             // btnSendData
             // 
-            btnSendData.Location = new Point(662, 399);
+            btnSendData.Location = new Point(303, 352);
             btnSendData.Name = "btnSendData";
             btnSendData.Size = new Size(115, 29);
             btnSendData.TabIndex = 1;
@@ -77,17 +100,6 @@
             btnSendData.UseVisualStyleBackColor = true;
             btnSendData.Visible = false;
             btnSendData.Click += btnSendData_Click;
-            // 
-            // btnConnect
-            // 
-            btnConnect.Location = new Point(520, 399);
-            btnConnect.Name = "btnConnect";
-            btnConnect.Size = new Size(136, 29);
-            btnConnect.TabIndex = 2;
-            btnConnect.Text = "Bağlan";
-            btnConnect.UseVisualStyleBackColor = true;
-            btnConnect.Visible = false;
-            btnConnect.Click += btnConnect_Click;
             // 
             // label1
             // 
@@ -143,7 +155,7 @@
             // 
             // btnPrinterStatus
             // 
-            btnPrinterStatus.Location = new Point(29, 12);
+            btnPrinterStatus.Location = new Point(28, 20);
             btnPrinterStatus.Name = "btnPrinterStatus";
             btnPrinterStatus.Size = new Size(162, 29);
             btnPrinterStatus.TabIndex = 9;
@@ -224,7 +236,7 @@
             panel1.Controls.Add(label4);
             panel1.Controls.Add(label10);
             panel1.Controls.Add(label11);
-            panel1.Location = new Point(420, 57);
+            panel1.Location = new Point(419, 65);
             panel1.Name = "panel1";
             panel1.Size = new Size(357, 213);
             panel1.TabIndex = 17;
@@ -308,37 +320,239 @@
             panel2.Controls.Add(lblErrorStatus);
             panel2.Controls.Add(label8);
             panel2.Controls.Add(label9);
-            panel2.Location = new Point(29, 57);
+            panel2.Location = new Point(28, 65);
             panel2.Name = "panel2";
             panel2.Size = new Size(348, 213);
             panel2.TabIndex = 18;
+            // 
+            // tabControl1
+            // 
+            tabControl1.Controls.Add(tabPage3);
+            tabControl1.Controls.Add(tabPage1);
+            tabControl1.Controls.Add(tabPage2);
+            tabControl1.Dock = DockStyle.Fill;
+            tabControl1.Location = new Point(0, 0);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(920, 565);
+            tabControl1.TabIndex = 19;
+            // 
+            // tabPage3
+            // 
+            tabPage3.Controls.Add(lvJobs);
+            tabPage3.Controls.Add(panel3);
+            tabPage3.Location = new Point(4, 29);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Size = new Size(912, 532);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "Dosya İşlemleri";
+            tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // lvJobs
+            // 
+            lvJobs.Columns.AddRange(new ColumnHeader[] { columnHeader1 });
+            lvJobs.Dock = DockStyle.Fill;
+            lvJobs.Location = new Point(179, 0);
+            lvJobs.MultiSelect = false;
+            lvJobs.Name = "lvJobs";
+            lvJobs.Size = new Size(733, 532);
+            lvJobs.TabIndex = 21;
+            lvJobs.UseCompatibleStateImageBehavior = false;
+            lvJobs.View = View.Details;
+            // 
+            // columnHeader1
+            // 
+            columnHeader1.Text = "Dosya Adı";
+            columnHeader1.Width = 300;
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(btnLoadFile);
+            panel3.Controls.Add(btnDownloadFile);
+            panel3.Controls.Add(btnJobLoad);
+            panel3.Controls.Add(btnDirectoryInfo);
+            panel3.Dock = DockStyle.Left;
+            panel3.Location = new Point(0, 0);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(179, 532);
+            panel3.TabIndex = 22;
+            // 
+            // btnLoadFile
+            // 
+            btnLoadFile.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btnLoadFile.Location = new Point(8, 149);
+            btnLoadFile.Name = "btnLoadFile";
+            btnLoadFile.Size = new Size(160, 39);
+            btnLoadFile.TabIndex = 23;
+            btnLoadFile.Text = "Dosya Yükle";
+            btnLoadFile.UseVisualStyleBackColor = true;
+            btnLoadFile.Click += btnLoadFile_Click;
+            // 
+            // btnDownloadFile
+            // 
+            btnDownloadFile.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btnDownloadFile.Location = new Point(8, 104);
+            btnDownloadFile.Name = "btnDownloadFile";
+            btnDownloadFile.Size = new Size(160, 39);
+            btnDownloadFile.TabIndex = 22;
+            btnDownloadFile.Text = "Dosyayı İndir";
+            btnDownloadFile.UseVisualStyleBackColor = true;
+            btnDownloadFile.Click += button1_Click;
+            // 
+            // btnJobLoad
+            // 
+            btnJobLoad.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btnJobLoad.Location = new Point(8, 59);
+            btnJobLoad.Name = "btnJobLoad";
+            btnJobLoad.Size = new Size(160, 39);
+            btnJobLoad.TabIndex = 21;
+            btnJobLoad.Text = "İşi Yükle";
+            btnJobLoad.UseVisualStyleBackColor = true;
+            btnJobLoad.Click += btnJobLoad_Click;
+            // 
+            // btnDirectoryInfo
+            // 
+            btnDirectoryInfo.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btnDirectoryInfo.Location = new Point(8, 14);
+            btnDirectoryInfo.Name = "btnDirectoryInfo";
+            btnDirectoryInfo.Size = new Size(160, 39);
+            btnDirectoryInfo.TabIndex = 20;
+            btnDirectoryInfo.Text = "İş Dosyaları";
+            btnDirectoryInfo.UseVisualStyleBackColor = true;
+            btnDirectoryInfo.Click += btnDirectoryInfo_Click;
+            // 
+            // tabPage1
+            // 
+            tabPage1.Controls.Add(btnPrinterStatus);
+            tabPage1.Controls.Add(panel2);
+            tabPage1.Controls.Add(btnSendData);
+            tabPage1.Controls.Add(panel1);
+            tabPage1.Controls.Add(txtData);
+            tabPage1.Location = new Point(4, 29);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(912, 532);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "Yazıcı Durumu";
+            tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Controls.Add(btnDisconnect);
+            tabPage2.Controls.Add(label12);
+            tabPage2.Controls.Add(lblConnectionMessage);
+            tabPage2.Controls.Add(cmbIpAddress);
+            tabPage2.Controls.Add(btnConnect);
+            tabPage2.Controls.Add(label13);
+            tabPage2.Controls.Add(txtPort);
+            tabPage2.Location = new Point(4, 29);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(912, 532);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "Bağlantı Ayarları";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // btnDisconnect
+            // 
+            btnDisconnect.BackColor = SystemColors.GradientInactiveCaption;
+            btnDisconnect.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btnDisconnect.Location = new Point(122, 168);
+            btnDisconnect.Name = "btnDisconnect";
+            btnDisconnect.Size = new Size(181, 37);
+            btnDisconnect.TabIndex = 13;
+            btnDisconnect.Text = "Bağlantıyı Kes";
+            btnDisconnect.UseVisualStyleBackColor = false;
+            btnDisconnect.Click += btnDisconnect_Click;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 162);
+            label12.Location = new Point(15, 15);
+            label12.Name = "label12";
+            label12.Size = new Size(107, 28);
+            label12.TabIndex = 8;
+            label12.Text = "Ip Adresi :";
+            // 
+            // lblConnectionMessage
+            // 
+            lblConnectionMessage.AutoSize = true;
+            lblConnectionMessage.Location = new Point(420, 23);
+            lblConnectionMessage.Name = "lblConnectionMessage";
+            lblConnectionMessage.Size = new Size(0, 20);
+            lblConnectionMessage.TabIndex = 12;
+            // 
+            // cmbIpAddress
+            // 
+            cmbIpAddress.FormattingEnabled = true;
+            cmbIpAddress.Location = new Point(122, 15);
+            cmbIpAddress.Name = "cmbIpAddress";
+            cmbIpAddress.Size = new Size(181, 28);
+            cmbIpAddress.TabIndex = 7;
+            cmbIpAddress.SelectedIndexChanged += cmbIpAddress_SelectedIndexChanged;
+            // 
+            // btnConnect
+            // 
+            btnConnect.BackColor = SystemColors.GradientInactiveCaption;
+            btnConnect.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btnConnect.Location = new Point(122, 125);
+            btnConnect.Name = "btnConnect";
+            btnConnect.Size = new Size(181, 37);
+            btnConnect.TabIndex = 11;
+            btnConnect.Text = "Bağlan";
+            btnConnect.UseVisualStyleBackColor = false;
+            btnConnect.Click += btnConnect_Click;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 162);
+            label13.Location = new Point(15, 65);
+            label13.Name = "label13";
+            label13.Size = new Size(63, 28);
+            label13.TabIndex = 9;
+            label13.Text = "Port :";
+            // 
+            // txtPort
+            // 
+            txtPort.Location = new Point(122, 66);
+            txtPort.Name = "txtPort";
+            txtPort.Size = new Size(181, 27);
+            txtPort.TabIndex = 10;
+            // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
+            openFileDialog1.Title = "Bir dosya seçiniz";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(panel2);
-            Controls.Add(panel1);
-            Controls.Add(btnPrinterStatus);
-            Controls.Add(btnConnect);
-            Controls.Add(btnSendData);
-            Controls.Add(txtData);
+            ClientSize = new Size(920, 565);
+            Controls.Add(tabControl1);
             Name = "Form1";
             Text = "Jet 2 Neo S";
+            Load += Form1_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            tabControl1.ResumeLayout(false);
+            tabPage3.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
+            tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
         private TextBox txtData;
         private Button btnSendData;
-        private Button btnConnect;
         private Label label1;
         private Label label2;
         private Label label3;
@@ -363,5 +577,24 @@
         private TextBox txtSignalTone;
         private TextBox txtShutdownBehavior;
         private Panel panel2;
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        private Label label12;
+        private Label lblConnectionMessage;
+        private ComboBox cmbIpAddress;
+        private Button btnConnect;
+        private Label label13;
+        private TextBox txtPort;
+        private Button btnDisconnect;
+        private TabPage tabPage3;
+        private Button btnDirectoryInfo;
+        private ListView lvJobs;
+        private ColumnHeader columnHeader1;
+        private Panel panel3;
+        private Button btnJobLoad;
+        private Button btnDownloadFile;
+        private Button btnLoadFile;
+        private OpenFileDialog openFileDialog1;
     }
 }

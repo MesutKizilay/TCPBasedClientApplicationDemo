@@ -1,7 +1,11 @@
-﻿using LeibingerControlCenter.Business.Abstract;
+﻿using Core.Utilities.Results;
+using LeibingerControlCenter.Business.Abstract;
+using LeibingerControlCenter.DataAccess.Abstract;
+using LeibingerControlCenter.Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,30 +14,70 @@ namespace LeibingerControlCenter.Business.Concrete
 {
     public class ClientManager : IClientService
     {
+        private readonly IClientDal _clientDal;
         private TcpClient _tcpClient;
         private NetworkStream _stream;
-        private string _ip;
-        private int _port;
+        //private string _ip;
+        //private int _port;
 
-        public ClientManager(TcpClient client)
+        public ClientManager(TcpClient client, IClientDal clientDal)
         {
             _tcpClient = client;
+            _clientDal = clientDal;
         }
 
-        public async Task ConnectToServer(string ip = "127.0.0.1", int port = 80)
+        //public async Task<IResult> ConnectToServer(string ip, int port)
+        //{
+        //    //_ip = ip;
+        //    //_port = port;
+
+        //    if (!_tcpClient.Connected)
+        //    {
+        //        await _tcpClient.ConnectAsync(ip, port);
+        //    }
+
+        //    return new SuccessResult("Bağlantı başarılı.");
+
+
+        //    //Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        //    //Socket.Connect("127.0.0.1", 80);
+        //    //Socket.Send(Encoding.UTF8.GetBytes("Merhaba"));
+
+
+        //    //Client.SendBufferSize = BufferSize;
+        //    //Client.ReceiveBufferSize = BufferSize;
+        //}
+
+        public async Task<IResult> ConnectToServer(string ip, int port)
         {
-            _ip = ip;
-            _port = port;
-            //_tcpClient = new TcpClient();
-            await _tcpClient.ConnectAsync(_ip, _port);
 
-            //Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            //Socket.Connect("127.0.0.1", 80);
-            //Socket.Send(Encoding.UTF8.GetBytes("Merhaba"));
+            // Eğer client zaten bağlıysa, önce bağlantıyı kopar
+            if (_tcpClient.Connected)
+            {
+                var currentEndpoint = _tcpClient.Client.RemoteEndPoint as IPEndPoint;
 
+                // Aynı IP/Port değilse bağlantıyı kopart ve yenisini oluştur
+                if (currentEndpoint == null || currentEndpoint.Address.ToString() != ip || currentEndpoint.Port != port)
+                {
+                    _tcpClient.Close();
+                    _tcpClient.Dispose();
+                    _tcpClient = new TcpClient();
+                }
+                else
+                {
+                    return new SuccessResult("Zaten bu IP ve port ile bağlantı var.");
+                }
+            }
 
-            //Client.SendBufferSize = BufferSize;
-            //Client.ReceiveBufferSize = BufferSize;
+            if (_tcpClient.Client == null)
+            {
+                _tcpClient = new TcpClient();
+            }
+
+            // Yeni bağlantı denemesi
+            await _tcpClient.ConnectAsync(ip, port);
+
+            return new SuccessResult("Yeni bağlantı başarılı.");
         }
 
         public void DisconnectFromServer()
@@ -44,7 +88,7 @@ namespace LeibingerControlCenter.Business.Concrete
                 _tcpClient?.Dispose();
                 _stream?.Dispose();
                 _stream?.Close();
-                _tcpClient = null;
+                //_tcpClient = null;
             }
         }
 
@@ -52,7 +96,7 @@ namespace LeibingerControlCenter.Business.Concrete
         {
             try
             {
-                await ConnectToServer();
+                //await ConnectToServer();
                 _stream = _tcpClient.GetStream();
 
                 byte[] data = Encoding.GetEncoding("ISO-8859-9").GetBytes(message);
@@ -76,7 +120,7 @@ namespace LeibingerControlCenter.Business.Concrete
 
             try
             {
-                byte[] buffer = new byte[1024];
+                byte[] buffer = new byte[1024 * 5];
                 int bytesRead = await _stream.ReadAsync(buffer, 0, buffer.Length);
                 if (bytesRead > 0)
                 {
@@ -96,9 +140,13 @@ namespace LeibingerControlCenter.Business.Concrete
             }
             finally
             {
-                _stream.Dispose();
-                DisconnectFromServer();
+                //DisconnectFromServer();
             }
+        }
+
+        public async Task<List<Client>> GetClients()
+        {
+            return await _clientDal.GetClients();
         }
     }
 }

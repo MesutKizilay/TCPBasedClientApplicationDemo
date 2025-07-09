@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LeibingerControlCenter.Core\LeibingerControlCenter.Core.csproj" />
-    <ProjectReference Include="..\LeibingerControlCenter.DataAccess\LeibingerControlCenter.DataAccess.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LeibingerControlCenter.Entities\LeibingerControlCenter.Entities.csproj" />
   </ItemGroup>
 

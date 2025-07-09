@@ -17,10 +17,10 @@ namespace LeibingerControlCenter.Business.Helpers
         public static List<string> ParseResponse(string response)
         {
             // Örnek: ^0=RS4\t4\t0\t0\t0\t0\r
-            if (!response.StartsWith("^") || !response.Contains("="))
-                throw new ArgumentException("Invalid response format");
+            //if (!response.StartsWith("^") || !response.Contains("="))
+            //    throw new ArgumentException("Invalid response format");
 
-            int cmdStart = response.IndexOf('=') + 3;
+            int cmdStart = response.IndexOfAny(['=', '$']) + 3;
             int cmdEnd = response.IndexOfAny(new[] { '\r' }, cmdStart);
 
             //string command = response.Substring(cmdStart, cmdEnd - cmdStart);
